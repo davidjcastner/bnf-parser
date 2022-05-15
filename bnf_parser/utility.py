@@ -3,6 +3,13 @@ from bnf_parser.custom_types import ExpressionStruct
 from bnf_parser.custom_types import RuleStruct
 from bnf_parser.custom_types import TermStruct
 
+ALLOWED_CHARS = set('''
+abcdefghijklmnopqrstuvwxyz
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+0123456789
++-*/%^&|~!=<>?:.,;()[]{}#$@`_
+ \\\t\n\r\'\"
+''')
 SPECIAL_CHAR_LOOKUP = {
     '\\\\': '\\',
     '\\n': '\n',
@@ -54,6 +61,7 @@ def _get_sequences(expression: str) -> ExpressionStruct:
                 index += 2 if is_optional else 1
             elif char == '\\':
                 special_char = expression[index: index + 2]
+                assert special_char in SPECIAL_CHAR_LOOKUP, 'invalid special char: {}'.format(special_char)
                 special_char = SPECIAL_CHAR_LOOKUP[special_char]
                 current_token += special_char
                 index += 2
@@ -95,6 +103,7 @@ def _get_sequences(expression: str) -> ExpressionStruct:
                 sqi += 1
                 index += 1
             else:
+                assert char in ALLOWED_CHARS, 'invalid char: {}'.format(char)
                 current_token += char
                 index += 1
     if current_token:
