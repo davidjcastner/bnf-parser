@@ -1,0 +1,24 @@
+; <bnf>
+<syntax>         ::= <syntax-line> | <syntax-line> <syntax>
+<syntax-line>    ::= <comment> | <rule>
+<comment>        ::= <opt-whitespace> ";" <comment-text> <line-end>
+<comment-text>   ::= <comment-char> | <comment-char> <comment-text>
+<comment-char>   ::= <letter> | <digit> | <symbol> | <opt-whitespace>
+<rule>           ::= <opt-whitespace> "<" <rule-name> ">" <opt-whitespace> "::=" <opt-whitespace> <expression> <line-end>
+<line-end>       ::= <opt-whitespace> <eol> | <line-end> <line-end>
+<expression>     ::= <list> | <list> <opt-whitespace> "|" <opt-whitespace> <expression>
+<list>           ::= <term> | <term> <opt-whitespace> <list>
+<term>           ::= <literal> | "<" <rule-name> ">"
+<opt-whitespace> ::= " " <opt-whitespace> | "\t" <opt-whitespace> | ""
+<rule-name>      ::= <letter> | <rule-name> <rule-char>
+<rule-char>      ::= <letter> | <digit> | "-"
+<literal>        ::= '"' <text1> '"' | "'" <text2> "'"
+<text1>          ::= "" | <character1> <text1>
+<text2>          ::= '' | <character2> <text2>
+<character1>     ::= <character> | "'"
+<character2>     ::= <character> | '"'
+<character>      ::= <letter> | <digit> | <symbol>
+<letter>         ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z"
+<digit>          ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+<eol>            ::= "\n" | "\r"
+<symbol>         ::=  "|" | " " | "!" | "#" | "$" | "%" | "&" | "(" | ")" | "*" | "+" | "," | "-" | "." | "/" | ":" | ";" | ">" | "=" | "<" | "?" | "@" | "[" | "]" | "^" | "_" | "`" | "{" | "}" | "~" | "\"

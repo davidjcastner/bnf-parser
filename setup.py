@@ -80,7 +80,7 @@ def main() -> None:
 
     # compile setuptools
     setuptools.setup(
-        name=REPO,
+        name='bnf_parser',
         author='David Castner',
         author_email='davidjcastner@gmail.com',
         version=version,
@@ -92,3 +92,7 @@ def main() -> None:
         classifiers=[],
         python_requires='>=3.10',
     )
+
+
+if __name__ == '__main__':
+    main()
