@@ -42,8 +42,8 @@ syntax-line     ::= line-end | comment | rule # line-end is allows for file to s
 rule            ::= whitespace? rule-name whitespace? '::=' whitespace? expression rule-end
 rule-end        ::= comment | line-end # rule-end allows for rule to end with a single line comment
 expression      ::= sequence | sequence whitespace? '|' whitespace? expression
-sequence        ::= terminal | terminal whitespace? sequence
-terminal        ::= opt-term | term
+sequence        ::= term | term whitespace? sequence
+term            ::= opt-term | req-term
 opt-term        ::= literal '?' | rule-name '?'
 req-term        ::= literal | rule-name
 rule-name       ::= letter | rule-name rule-char

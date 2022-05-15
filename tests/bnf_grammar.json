@@ -45,61 +45,6 @@
                     "type": "terminal",
                     "text": "rule",
                     "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "#",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "line-end",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "is",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "allows",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "for",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "file",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "to",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "start",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "with",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "a",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "newline",
-                    "optional": false
                 }
             ]
         ]
@@ -161,66 +106,6 @@
                     "type": "terminal",
                     "text": "line-end",
                     "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "#",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "rule-end",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "allows",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "for",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "rule",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "to",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "end",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "with",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "a",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "single",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "line",
-                    "optional": false
-                },
-                {
-                    "type": "terminal",
-                    "text": "comment",
-                    "optional": false
                 }
             ]
         ]
@@ -270,14 +155,14 @@
             [
                 {
                     "type": "terminal",
-                    "text": "terminal",
+                    "text": "term",
                     "optional": false
                 }
             ],
             [
                 {
                     "type": "terminal",
-                    "text": "terminal",
+                    "text": "term",
                     "optional": false
                 },
                 {
@@ -294,7 +179,7 @@
         ]
     },
     {
-        "rule-name": "terminal",
+        "rule-name": "term",
         "expression": [
             [
                 {
@@ -306,7 +191,7 @@
             [
                 {
                     "type": "terminal",
-                    "text": "term",
+                    "text": "req-term",
                     "optional": false
                 }
             ]

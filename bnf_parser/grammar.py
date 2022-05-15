@@ -1,105 +1,100 @@
-# <syntax>         ::= <rule> | <rule> <syntax>
-# <comment>        ::= <opt-whitespace> ";" <any-character-sequence> <line-end>
-# <any-character-sequence>  ::= <any-character> | <any-character> <any-character>
-# <any-character>  ::= <letter> | <digit> | <symbol> | <opt-whitespace>
-# <rule>           ::= <opt-whitespace> "<" <rule-name> ">" <opt-whitespace> "::=" <opt-whitespace> <expression> <line-end>
-# <opt-whitespace> ::= " " <opt-whitespace> | ""
-# <expression>     ::= <list> | <list> <opt-whitespace> "|" <opt-whitespace> <expression>
-# <line-end>       ::= <opt-whitespace> <end-of-line> | <line-end> <line-end>
-# <list>           ::= <term> | <term> <opt-whitespace> <list>
-# <term>           ::= <literal> | "<" <rule-name> ">"
-# <literal>        ::= '"' <text1> '"' | "'" <text2> "'"
-# <text1>          ::= "" | <character1> <text1>
-# <text2>          ::= '' | <character2> <text2>
-# <character>      ::= <letter> | <digit> | <symbol>
-# <letter>         ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z"
-# <digit>          ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
-# <end-of-line>    ::= "\n" | "\r"
-# <character1>     ::= <character> | "'"
-# <character2>     ::= <character> | '"'
-# <rule-name>      ::= <letter> | <rule-name> <rule-char>
-# <rule-char>      ::= <letter> | <digit> | "-"
-# <symbol>         ::=  "|" | " " | "!" | "#" | "$" | "%" | "&" | "(" | ")" | "*" | "+" | "," | "-" | "." | "/" | ":" | ";" | ">" | "=" | "<" | "?" | "@" | "[" | "]" | "^" | "_" | "`" | "{" | "}" | "~" | "\"
-
-from bnf_parser.lexer import Lexer
-from enum import Enum
-
-
-class BnfToken(Enum):
-    '''all token types for the bnf grammar'''
-    SYNTAX = 'syntax',
-    COMMENT = 'comment',
-    ANY_CHARACTER_SEQUENCE = 'any_character_sequence',
-    ANY_CHARACTER = 'any_character',
-    RULE = 'rule',
-    OPT_WHITESPACE = 'opt_whitespace',
-    EXPRESSION = 'expression',
-    LINE_END = 'line_end',
-    LIST = 'list',
-    TERM = 'term',
-    LITERAL = 'literal',
-    TEXT1 = 'text1',
-    TEXT2 = 'text2',
-    CHARACTER = 'character',
-    LETTER = 'letter',
-    DIGIT = 'digit',
-    END_OF_LINE = 'end_of_line',
-    CHARACTER1 = 'character1',
-    CHARACTER2 = 'character2',
-    RULE_NAME = 'rule_name',
-    RULE_CHAR = 'rule_char',
-    SYMBOL = 'symbol',
-
-
-class GrammarRuleName: ...
-
-
-GrammarSequence = list[GrammarRuleName | str]
-GrammarExpression = list[GrammarSequence]
-class GrammarRule: ...
-
-
-BT = BnfToken
-GR = GrammarRule
-GN = GrammarRuleName
-
-BNF_RULES = [
-    GR(BT.SYNTAX, [[GN(BT.RULE)], [GN(BT.RULE), GN(BT.SYNTAX)]]),
-    GR(BT.COMMENT, [[GN(BT.OPT_WHITESPACE), ';', GN(BT.ANY_CHARACTER_SEQUENCE), GN(BT.LINE_END)]]),
-    GR(BT.ANY_CHARACTER_SEQUENCE, [[GN(BT.ANY_CHARACTER)], [GN(BT.ANY_CHARACTER), GN(BT.ANY_CHARACTER)]]),
-    GR(BT.ANY_CHARACTER, [[GN(BT.LETTER)], [GN(BT.DIGIT)], [GN(BT.SYMBOL)], [GN(BT.OPT_WHITESPACE)]]),
-    GR(BT.RULE, [[GN(BT.OPT_WHITESPACE), '<', GN(BT.RULE_NAME), '>', GN(BT.OPT_WHITESPACE), '::=', GN(BT.OPT_WHITESPACE), GN(BT.EXPRESSION), GN(BT.LINE_END)]]),
-    GR(BT.OPT_WHITESPACE, [[' ', GN(BT.OPT_WHITESPACE)], ['']]),
-    GR(BT.EXPRESSION, [[GN(BT.LIST)], [GN(BT.LIST), GN(BT.OPT_WHITESPACE), '|', GN(BT.OPT_WHITESPACE), GN(BT.EXPRESSION)]]),
-    GR(BT.LINE_END, [[GN(BT.OPT_WHITESPACE), GN(BT.EOL)], [GN(BT.LINE_END), GN(BT.LINE_END)]]),
-    GR(BT.LIST, [[GN(BT.TERM)], [GN(BT.TERM), GN(BT.OPT_WHITESPACE), GN(BT.LIST)]]),
-    GR(BT.TERM, [[GN(BT.LITERAL)], ['<', GN(BT.RULE_NAME), '>']]),
-    GR(BT.LITERAL, [['"', GN(BT.TEXT1), '"'], ["'", GN(BT.TEXT2), "'"]]),
-    GR(BT.TEXT1, [[''], [GN(BT.CHARACTER1), GN(BT.TEXT1)]]),
-    GR(BT.TEXT2, [[''], [GN(BT.CHARACTER2), GN(BT.TEXT2)]]),
-    GR(BT.CHARACTER, [[GN(BT.LETTER)], [GN(BT.DIGIT)], [GN(BT.SYMBOL)]]),
-    GR(BT.LETTER, [['A'], ['B'], ['C'], ['D'], ['E'], ['F'], ['G'], ['H'], ['I'], ['J'], ['K'], ['L'], ['M'], ['N'], ['O'], ['P'], ['Q'], ['R'], ['S'], ['T'], ['U'], ['V'], ['W'], ['X'], ['Y'], ['Z'], ['a'], ['b'], ['c'], ['d'], ['e'], ['f'], ['g'], ['h'], ['i'], ['j'], ['k'], ['l'], ['m'], ['n'], ['o'], ['p'], ['q'], ['r'], ['s'], ['t'], ['u'], ['v'], ['w'], ['x'], ['y'], ['z']]),
-    GR(BT.DIGIT, [['0'], ['1'], ['2'], ['3'], ['4'], ['5'], ['6'], ['7'], ['8'], ['9']]),
-    GR(BT.END_OF_LINE, [['\n'], ['\r']]),
-    GR(BT.CHARACTER1, [[GN(BT.CHARACTER)], ["'"]]),
-    GR(BT.CHARACTER2, [[GN(BT.CHARACTER)], ['"']]),
-    GR(BT.RULE_NAME, [[GN(BT.LETTER)], [GN(BT.RULE_NAME), GN(BT.RULE_CHAR)]]),
-    GR(BT.RULE_CHAR, [[GN(BT.LETTER)], [GN(BT.DIGIT)], ['-', GN(BT.RULE_CHAR)]]),
-    GR(BT.SYMBOL, [['|'], [' '], ['!'], ['#'], ['$'], ['%'], ['&'], ['('], [')'], ['*'], ['+'], [','], ['-'], ['.'], ['/'], [':'], [';'], ['>'], ['='], ['<'], ['?'], ['@'], ['['], [']'], ['^'], ['_'], ['`'], ['{'], ['}'], ['~'], ['\\']])
-]
+from __future__ import annotations
+import json
+from bnf_parser.custom_types import ExpressionStruct
+from bnf_parser.custom_types import GrammarStruct
+from bnf_parser.custom_types import RuleStruct
+from bnf_parser.custom_types import SequenceStruct
+from bnf_parser.custom_types import TermStruct
+from bnf_parser.utility import parse_bnf_rules
 
 
 class Grammar:
-    '''a ruleset for a grammar created from text in bnf format'''
+    '''an ordered rule set for a language'''
 
-    def __init__(self, bnf: str) -> None:
-        self._bnf_string = bnf
+    def __init__(self, name: str = '') -> None:
+        self._name = name
+        self._rule_order: list[str] = []
+        self._expressions: dict[str, ExpressionStruct] = {}
 
-    def _parse_bnf(self) -> None:
-        '''parses the bnf string into a list of rules,
-        cannot use the parser from this library
-        because it is dependant on the grammar'''
-        # use a lexer to tokenize the bnf string
-        lexer = Lexer(BNF_RULES)
-        tokens = lexer.tokenize(self._bnf_string)
-        # create a rule list from the tokens
+    def __repr__(self) -> str:
+        return self.to_bnf()
+
+    def _add_rule(self, rule_name: str, expression: ExpressionStruct) -> None:
+        '''adds a rule to the grammar'''
+        self._rule_order.append(rule_name)
+        self._expressions[rule_name] = expression
+
+    @staticmethod
+    def from_json(source: str) -> Grammar:
+        '''
+        creates a grammar from a json string
+
+        format: { 'syntax-name': str, 'rules': list[list[TermStruct]] }
+        TermStruct = {'type': str, 'text': str, 'optional': bool}
+        '''
+        raw: GrammarStruct = json.loads(source)
+        grammar = Grammar(raw['syntax-name'])
+        for rule in raw['rules']:
+            grammar._add_rule(rule['rule-name'], rule['expression'])
+        return grammar
+
+    def _rule_to_json(self, rule: str) -> RuleStruct:
+        '''returns a json string representing the rule'''
+        return {
+            'rule-name': rule,
+            'expression': self._expressions[rule]
+        }
+
+    def to_json(self) -> str:
+        '''
+        returns a json string representing the grammar
+
+        format: { 'syntax-name': str, 'rules': list[list[TermStruct]] }
+        TermStruct = {'type': str, 'text': str, 'optional': bool}
+        '''
+        output = {
+            'syntax-name': self._name,
+            'rules': [self._rule_to_json(rule) for rule in self._rule_order]
+        }
+        return json.dumps(output, indent=4)
+
+    @staticmethod
+    def from_bnf(source: str, syntax_name: str = '') -> Grammar:
+        '''creates a grammar from a bnf string'''
+        bnf_rules = parse_bnf_rules(source)
+        json_data = {
+            'syntax-name': syntax_name,
+            'rules': bnf_rules
+        }
+        return Grammar.from_json(json.dumps(json_data))
+
+    def _term_to_bnf(self, term: TermStruct) -> str:
+        '''returns a bnf string representing the term'''
+        suffix = '?' if term['optional'] else ''
+        if term['type'] == 'literal':
+            return repr(term['text']) + suffix
+        return term['text'] + suffix
+
+    def _sequence_to_bnf(self, sequence: SequenceStruct) -> str:
+        '''returns a bnf string representing the sequence'''
+        return ' '.join(self._term_to_bnf(term) for term in sequence)
+
+    def _expression_to_bnf(self, rule: str) -> str:
+        '''returns a bnf string representing the expression'''
+        return ' | '.join(self._sequence_to_bnf(sequence) for sequence in self._expressions[rule])
+
+    def to_bnf(self) -> str:
+        '''returns a bnf string representing the grammar'''
+        output = f'# {self._name}\n'
+        for rule in self._rule_order:
+            output += f'{rule} ::= {self._expression_to_bnf(rule)}\n'
+        return output
+
+
+if __name__ == '__main__':
+    # grammar_str = '{"syntax-name":"bnf","rules":[{"rule-name":"syntax","expression":[[{"type":"literal","text":"hello world","optional":false}]]}]}'
+    with open('tests/bnf_grammar.bnf') as f:
+        grammar_str = f.read()
+    grammar = Grammar.from_bnf(grammar_str, 'bnf')
+    print(grammar.to_bnf()[:-1])
+    # print(grammar.to_json())
