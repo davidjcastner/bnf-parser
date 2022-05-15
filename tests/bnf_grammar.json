@@ -12,7 +12,7 @@
             [
                 {
                     "type": "terminal",
-                    "text": "syntax-line",
+                    "text": "syntax",
                     "optional": false
                 },
                 {
@@ -29,6 +29,13 @@
             [
                 {
                     "type": "terminal",
+                    "text": "line-end",
+                    "optional": false
+                }
+            ],
+            [
+                {
+                    "type": "terminal",
                     "text": "comment",
                     "optional": false
                 }
@@ -38,89 +45,60 @@
                     "type": "terminal",
                     "text": "rule",
                     "optional": false
-                }
-            ]
-        ]
-    },
-    {
-        "rule-name": "comment",
-        "expression": [
-            [
-                {
-                    "type": "terminal",
-                    "text": "whitespace",
-                    "optional": true
                 },
                 {
-                    "type": "literal",
+                    "type": "terminal",
                     "text": "#",
                     "optional": false
                 },
                 {
                     "type": "terminal",
-                    "text": "comment-text",
-                    "optional": true
-                },
-                {
-                    "type": "terminal",
                     "text": "line-end",
                     "optional": false
-                }
-            ]
-        ]
-    },
-    {
-        "rule-name": "comment-text",
-        "expression": [
-            [
+                },
                 {
                     "type": "terminal",
-                    "text": "comment-char",
-                    "optional": false
-                }
-            ],
-            [
-                {
-                    "type": "terminal",
-                    "text": "comment-char",
+                    "text": "is",
                     "optional": false
                 },
                 {
                     "type": "terminal",
-                    "text": "comment-text",
+                    "text": "allows",
                     "optional": false
-                }
-            ]
-        ]
-    },
-    {
-        "rule-name": "comment-char",
-        "expression": [
-            [
-                {
-                    "type": "literal",
-                    "text": "\\",
-                    "optional": false
-                }
-            ],
-            [
+                },
                 {
                     "type": "terminal",
-                    "text": "character",
+                    "text": "for",
                     "optional": false
-                }
-            ],
-            [
+                },
                 {
                     "type": "terminal",
-                    "text": "quotes",
+                    "text": "file",
                     "optional": false
-                }
-            ],
-            [
+                },
                 {
                     "type": "terminal",
-                    "text": "whitespace",
+                    "text": "to",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "start",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "with",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "a",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "newline",
                     "optional": false
                 }
             ]
@@ -162,7 +140,86 @@
                 },
                 {
                     "type": "terminal",
+                    "text": "rule-end",
+                    "optional": false
+                }
+            ]
+        ]
+    },
+    {
+        "rule-name": "rule-end",
+        "expression": [
+            [
+                {
+                    "type": "terminal",
+                    "text": "comment",
+                    "optional": false
+                }
+            ],
+            [
+                {
+                    "type": "terminal",
                     "text": "line-end",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "#",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "rule-end",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "allows",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "for",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "rule",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "to",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "end",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "with",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "a",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "single",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "line",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "comment",
                     "optional": false
                 }
             ]
@@ -348,6 +405,90 @@
                 {
                     "type": "literal",
                     "text": "-",
+                    "optional": false
+                }
+            ]
+        ]
+    },
+    {
+        "rule-name": "comment",
+        "expression": [
+            [
+                {
+                    "type": "terminal",
+                    "text": "whitespace",
+                    "optional": true
+                },
+                {
+                    "type": "literal",
+                    "text": "#",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "comment-text",
+                    "optional": true
+                },
+                {
+                    "type": "terminal",
+                    "text": "line-end",
+                    "optional": false
+                }
+            ]
+        ]
+    },
+    {
+        "rule-name": "comment-text",
+        "expression": [
+            [
+                {
+                    "type": "terminal",
+                    "text": "comment-char",
+                    "optional": false
+                }
+            ],
+            [
+                {
+                    "type": "terminal",
+                    "text": "comment-char",
+                    "optional": false
+                },
+                {
+                    "type": "terminal",
+                    "text": "comment-text",
+                    "optional": false
+                }
+            ]
+        ]
+    },
+    {
+        "rule-name": "comment-char",
+        "expression": [
+            [
+                {
+                    "type": "literal",
+                    "text": "\\",
+                    "optional": false
+                }
+            ],
+            [
+                {
+                    "type": "terminal",
+                    "text": "character",
+                    "optional": false
+                }
+            ],
+            [
+                {
+                    "type": "terminal",
+                    "text": "quotes",
+                    "optional": false
+                }
+            ],
+            [
+                {
+                    "type": "terminal",
+                    "text": "whitespace",
                     "optional": false
                 }
             ]

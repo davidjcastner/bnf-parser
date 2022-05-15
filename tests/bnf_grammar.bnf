@@ -35,16 +35,12 @@
 # note backspace and formfeed are not
 
 # root rule
-syntax          ::= syntax-line | syntax-line syntax
-syntax-line     ::= comment | rule
-
-# comment structure
-comment         ::= whitespace? '#' comment-text? line-end
-comment-text    ::= comment-char | comment-char comment-text
-comment-char    ::= '\\' | character | quotes | whitespace
+syntax          ::= syntax-line | syntax syntax
+syntax-line     ::= line-end | comment | rule # line-end is allows for file to start with a newline
 
 # rule structure
-rule            ::= whitespace? rule-name whitespace? '::=' whitespace? expression line-end
+rule            ::= whitespace? rule-name whitespace? '::=' whitespace? expression rule-end
+rule-end        ::= comment | line-end # rule-end allows for rule to end with a single line comment
 expression      ::= sequence | sequence whitespace? '|' whitespace? expression
 sequence        ::= terminal | terminal whitespace? sequence
 terminal        ::= opt-term | term
@@ -52,6 +48,11 @@ opt-term        ::= literal '?' | rule-name '?'
 req-term        ::= literal | rule-name
 rule-name       ::= letter | rule-name rule-char
 rule-char       ::= letter | digit | '-'
+
+# comment structure - single line comments only
+comment         ::= whitespace? '#' comment-text? line-end
+comment-text    ::= comment-char | comment-char comment-text
+comment-char    ::= '\\' | character | quotes | whitespace
 
 # literal structure
 # 1 - single quote, 2 - double quote
