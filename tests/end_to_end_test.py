@@ -13,11 +13,18 @@ def _remove_blank_lines(text: str) -> str:
     return '\n'.join(lines)
 
 
+def _remove_comments(text: str, symbol: str = '#') -> str:
+    '''removes comments from the text'''
+    lines = text.split('\n')
+    lines = (line for line in lines if not line.startswith(symbol))
+    return '\n'.join(lines)
+
+
 def _load_bnf_grammar() -> str:
     '''loads the bnf grammer file and removes any blank lines'''
     with open('tests/bnf_grammar.bnf', 'r') as f:
         bnf = f.read()
-    return _remove_blank_lines(bnf)
+    return bnf
 
 
 def test_end_to_end_success() -> None:
@@ -39,6 +46,8 @@ def test_end_to_end_failure() -> None:
     '''tests if the parser fails to parse bnf grammar
     when any single line from the grammer file'''
     bnf = _load_bnf_grammar()
+    bnf = _remove_blank_lines(bnf)
+    bnf = _remove_comments(bnf)
     bnf_line_count = len(bnf.split('\n'))
     for line_index in range(bnf_line_count):
         grammar_source = _remove_line(bnf, line_index)

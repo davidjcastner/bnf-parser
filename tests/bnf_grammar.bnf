@@ -1,24 +1,77 @@
-; <bnf>
-<syntax>         ::= <syntax-line> | <syntax-line> <syntax>
-<syntax-line>    ::= <comment> | <rule>
-<comment>        ::= <opt-whitespace> ";" <comment-text> <line-end>
-<comment-text>   ::= <comment-char> | <comment-char> <comment-text>
-<comment-char>   ::= <letter> | <digit> | <symbol> | <opt-whitespace>
-<rule>           ::= <opt-whitespace> "<" <rule-name> ">" <opt-whitespace> "::=" <opt-whitespace> <expression> <line-end>
-<line-end>       ::= <opt-whitespace> <eol> | <line-end> <line-end>
-<expression>     ::= <list> | <list> <opt-whitespace> "|" <opt-whitespace> <expression>
-<list>           ::= <term> | <term> <opt-whitespace> <list>
-<term>           ::= <literal> | "<" <rule-name> ">"
-<opt-whitespace> ::= " " <opt-whitespace> | "\t" <opt-whitespace> | ""
-<rule-name>      ::= <letter> | <rule-name> <rule-char>
-<rule-char>      ::= <letter> | <digit> | "-"
-<literal>        ::= '"' <text1> '"' | "'" <text2> "'"
-<text1>          ::= "" | <character1> <text1>
-<text2>          ::= '' | <character2> <text2>
-<character1>     ::= <character> | "'"
-<character2>     ::= <character> | '"'
-<character>      ::= <letter> | <digit> | <symbol>
-<letter>         ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z"
-<digit>          ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
-<eol>            ::= "\n" | "\r"
-<symbol>         ::=  "|" | " " | "!" | "#" | "$" | "%" | "&" | "(" | ")" | "*" | "+" | "," | "-" | "." | "/" | ":" | ";" | ">" | "=" | "<" | "?" | "@" | "[" | "]" | "^" | "_" | "`" | "{" | "}" | "~" | "\"
+# grammar for bnf language
+
+# the best practice for recursive rules is the following syntax:
+# A ::= B | B A
+
+# optional terms can be implmented with the following syntax:
+# A ::= B? A
+
+# a valid bnf grammar is valid if:
+# - there are no duplicate rules
+# - there are no empty literals, example: '' is empty
+# - there are no empty rules
+# - there are no circular rules, example: A -> B, B -> A is circular
+# - every rule must have at least one sequence without itself
+# - there is at least one rules that has a seqeunce of literals
+# - there are no multiline rules
+# - there are no multiline comments
+# - literals must be enclosed in single or double quotes
+# - optional terminals end with a question mark
+
+# in top down notation:
+# - the first rule that is valid is used
+# - a rule cannot use terminals that are above it in the grammar
+# - the first sequence that is valid in a rule is used
+
+# the following characters are denoted as special characters:
+# note: backspace and formfeed are not supported
+# \\ -> backslash
+# \n -> newline
+# \r -> carriage return
+# \t -> tab
+# \' -> single quote
+# \" -> double quote
+
+# note backspace and formfeed are not
+
+# root rule
+syntax          ::= syntax-line | syntax-line syntax
+syntax-line     ::= comment | rule
+
+# comment structure
+comment         ::= whitespace? '#' comment-text? line-end
+comment-text    ::= comment-char | comment-char comment-text
+comment-char    ::= '\\' | character | quotes | whitespace
+
+# rule structure
+rule            ::= whitespace? rule-name whitespace? '::=' whitespace? expression line-end
+expression      ::= sequence | sequence whitespace? '|' whitespace? expression
+sequence        ::= terminal | terminal whitespace? sequence
+terminal        ::= opt-term | term
+opt-term        ::= literal '?' | rule-name '?'
+req-term        ::= literal | rule-name
+rule-name       ::= letter | rule-name rule-char
+rule-char       ::= letter | digit | '-'
+
+# literal structure
+# 1 - single quote, 2 - double quote
+literal         ::= single-quote single-text single-quote | double-quote double-text double-quote
+single-text     ::= single-char | single-char single-text
+double-text     ::= double-char | double-char double-text
+single-char     ::= special-char | character | double-quote
+double-char     ::= special-char | character | single-quote
+
+# characters - base tokens
+line-end        ::= whitespace? '\n' | whitespace? '\r' | line-end line-end
+whitespace      ::= ' ' | '\t' | whitespace whitespace
+special-char    ::= '\\\\' | '\\n' | '\\r' | '\\t' | '\\\'' | '\\\"'
+quotes          ::= single-quote | double-quote
+single-quote    ::= "'"
+double-quote    ::= '"'
+character       ::= letter | digit | symbol
+letter          ::= upper-case | lower-case
+upper-case      ::= 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z'
+lower-case      ::= 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z'
+digit           ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+# note there are no special symbols or quotes in the symbol terminal
+symbol          ::= '+' | '-' | '*' | '/' | '%' | '^' | '&' | '|' | '~' | '!' | '=' | '<' | '>' | '?' | ':' | '.' | ',' | ';' | '(' | ')' | '[' | ']' | '{' | '}' | '#' | '$' | '@' | '`' | '_' | ' '
