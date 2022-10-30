@@ -56,7 +56,7 @@ class Grammar:
             'syntax-name': self._name,
             'rules': [self._rule_to_json(rule) for rule in self._rule_order]
         }
-        return json.dumps(output, indent=4)
+        return json.dumps(output)
 
     @staticmethod
     def from_bnf(source: str, syntax_name: str = '') -> Grammar:
@@ -85,16 +85,26 @@ class Grammar:
 
     def to_bnf(self) -> str:
         '''returns a bnf string representing the grammar'''
-        output = f'# {self._name}\n'
+        output = f'# {self._name}\n' if self._name else ''
         for rule in self._rule_order:
             output += f'{rule} ::= {self._expression_to_bnf(rule)}\n'
         return output
 
 
 if __name__ == '__main__':
-    # grammar_str = '{"syntax-name":"bnf","rules":[{"rule-name":"syntax","expression":[[{"type":"literal","text":"hello world","optional":false}]]}]}'
+    GRAMMAR = '''
+addition        ::= whitespace? number whitespace? '+' whitespace? number whitespace?
+subtraction     ::= whitespace? number whitespace? '-' whitespace? number whitespace?
+number          ::= negative? integer | negative? float
+negative        ::= '-'
+float           ::= integer '.' integer
+integer         ::= digit | digit integer
+digit           ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+whitespace      ::= whitespace-char | whitespace-char whitespace
+whitespace-char ::= ' '
+'''
     with open('tests/bnf_grammar.bnf') as f:
         grammar_str = f.read()
-    grammar = Grammar.from_bnf(grammar_str, 'bnf')
+    grammar = Grammar.from_bnf(GRAMMAR)
     print(grammar.to_bnf()[:-1])
-    # print(grammar.to_json())
+    print(grammar.to_json())

@@ -1,0 +1,9 @@
+addition        ::= whitespace? number whitespace? '+' whitespace? number whitespace?
+subtraction     ::= whitespace? number whitespace? '-' whitespace? number whitespace?
+number          ::= negative? integer | negative? float
+negative        ::= '-'
+float           ::= integer '.' integer
+integer         ::= digit | digit integer
+digit           ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+whitespace      ::= whitespace-char | whitespace-char whitespace
+whitespace-char ::= ' ' | '\t' | '\n' | '\r'
